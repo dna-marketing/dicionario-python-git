@@ -241,7 +241,7 @@ function modoBusca() {
 function renderLista() {
   const termo = $('#busca').value.trim().toLowerCase();
   const modo = modoBusca();
-  let lista = ITENS.filter(i => i.grupo === areaAtual);
+  let lista = termo ? ITENS.slice() : ITENS.filter(i => i.grupo === areaAtual);
   if (termo) {
     lista = lista.filter(i => {
       const campo = modo === 'operacao' ? i.codigo : i.oque;
@@ -252,7 +252,7 @@ function renderLista() {
 
   const box = $('#lista');
   box.innerHTML = '';
-  $('#contador').textContent = `${lista.length} resultado(s)`;
+  $('#contador').textContent = `${lista.length} resultado(s)${termo ? ' em todas as áreas' : ''}`;
   if (!lista.length) {
     box.innerHTML = '<div class="vazio">Nada encontrado. Tente outra palavra ou troque o modo de busca.</div>';
     return;
@@ -269,7 +269,7 @@ function renderLista() {
       <div class="exemplo"><button class="copy" type="button">Copiar</button><span class="ex-texto"></span></div>
       <h4>Quando usar</h4><p class="quando"></p>`;
     d.querySelector('.codigo').textContent = i.codigo;
-    d.querySelector('.cat').textContent = i.categoria;
+    d.querySelector('.cat').textContent = termo ? `${i.grupo} · ${i.categoria}` : i.categoria;
     d.querySelector('.oque').textContent = i.oque;
     d.querySelector('.ex-texto').textContent = i.exemplo;
     d.querySelector('.quando').textContent = i.quando;
