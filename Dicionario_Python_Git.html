@@ -7,17 +7,17 @@
 <style>
   :root {
     --bg: #f5f6f8; --card: #ffffff; --text: #1d2330; --muted: #5d6676;
-    --accent: #1f4e78; --accent-2: #e8f0f8; --code-bg: #eef1f5; --border: #dde2ea;
+    --accent: #1f4e78; --accent-2: #e8f0f8; --code-bg: #eef1f5; --border: #dde2ea; --cmd: #1b7a43;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #14171d; --card: #1d2230; --text: #e8ebf1; --muted: #a3acbb;
-      --accent: #7fb2e5; --accent-2: #243044; --code-bg: #111520; --border: #2f3747;
+      --accent: #7fb2e5; --accent-2: #243044; --code-bg: #111520; --border: #2f3747; --cmd: #7fd49a;
     }
   }
   :root[data-theme="dark"] {
     --bg: #14171d; --card: #1d2230; --text: #e8ebf1; --muted: #a3acbb;
-    --accent: #7fb2e5; --accent-2: #243044; --code-bg: #111520; --border: #2f3747;
+    --accent: #7fb2e5; --accent-2: #243044; --code-bg: #111520; --border: #2f3747; --cmd: #7fd49a;
   }
   * { box-sizing: border-box; }
   html { font-size: 14px; }
@@ -66,7 +66,7 @@
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
     padding: 10px 12px; margin-bottom: 8px;
   }
-  .item .codigo { font-family: ui-monospace, Consolas, monospace; font-weight: 700; font-size: .9rem; color: var(--accent); word-break: break-word; }
+  .item .codigo { font-family: ui-monospace, Consolas, monospace; font-weight: 700; font-size: .9rem; color: var(--cmd); word-break: break-word; }
   .item .cat { color: var(--muted); font-size: max(10px, .74rem); margin-top: 1px; }
   .item h4 { margin: 8px 0 1px; font-size: max(9px, .68rem); text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
   .item p { margin: 0; }
@@ -106,6 +106,12 @@
 
   .vazio { text-align: center; color: var(--muted); padding: 24px 8px; font-size: .85rem; }
   .hidden { display: none !important; }
+  .ref-sql { background: var(--accent-2); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; margin: 4px 0 16px; }
+  .ref-sql .tag { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: var(--accent); color: #fff; padding: 3px 9px; border-radius: 999px; }
+  .ref-sql h3 { margin: 8px 0 6px; font-size: 1rem; color: var(--text); }
+  .ref-sql pre { background: var(--code-bg); border-radius: 8px; padding: 10px 12px; margin: 8px 0; font-family: ui-monospace, Consolas, monospace; font-size: .88rem; line-height: 1.7; white-space: pre-wrap; color: var(--text); }
+  .ref-sql .kw { font-weight: 700; color: var(--cmd); }
+  .ref-sql p { margin: 6px 0 0; color: var(--muted); font-size: .9rem; }
   .ajuste { display: flex; gap: 6px; align-items: center; margin: 0 0 10px; }
   .ajuste button {
     font: inherit; font-weight: 700; border: 1px solid var(--border); background: var(--card); color: var(--text);
@@ -145,6 +151,16 @@
         <label><input type="radio" name="modo" value="operacao" checked>Operação (o comando)</label>
         <label><input type="radio" name="modo" value="oquefaz">O que faz (a explicação)</label>
       </div>
+    </div>
+    <div id="ref-sql" class="ref-sql hidden">
+      <span class="tag">Referência</span>
+      <h3>Ordem de escrita de uma consulta</h3>
+      <pre><span class="kw">SELECT</span>   → o que eu quero ver
+<span class="kw">FROM</span>     → de qual tabela
+<span class="kw">WHERE</span>    → com qual filtro (quando tem)
+<span class="kw">GROUP BY</span> → agrupando por quê (quando tem)
+<span class="kw">ORDER BY</span> → ordenando como (quando tem)</pre>
+      <p>Sempre nessa sequência. É como uma frase em inglês: <em>"me mostra isso, dessa tabela, onde tal condição"</em>.</p>
     </div>
     <div class="count" id="contador"></div>
     <div id="lista"></div>
@@ -214,6 +230,7 @@ function abrirArea(id) {
   $('#subtitulo').textContent = a.desc;
   $('#busca').value = '';
   renderLista();
+  $('#ref-sql').classList.toggle('hidden', id !== 'SQL');
   window.scrollTo(0, 0);
   $('#busca').focus();
 }
